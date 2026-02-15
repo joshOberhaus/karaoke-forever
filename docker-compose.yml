@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  karaoke-forever:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: karaoke-forever
+    ports:
+      - "8090:3000"
+    volumes:
+      # Mount your karaoke media files directory
+      - ./media:/media
+      # Persist database and configuration
+      - ./data:/root/.config/Karaoke Forever Server
+    environment:
+      # Optional: Set environment variables as needed
+      - NODE_ENV=production
+    restart: unless-stopped
+    depends_on:
+      - karaokeer
+    networks:
+      - karaoke-network
+
+  karaokeer:
+    build:
+      context: ./AutoLyrixAlignService
+      dockerfile: Dockerfile
+    container_name: karaokeer
+    ports:
+      # This line maps port 3000 inside the container to port 3001 on the host machine.
+      # Within the Docker network, other services should access this service using port 3000 (e.g., http://karaokeer:3000).
+      # The mapped host port (3001) is used for access from outside the Docker network (e.g., from your browser or host machine).
+      - "3001:3000"
+    volumes:
+      # Share karaoke output directory
+      - ./media/karaoke:/media/karaoke
+    environment:
+      - KARAOKE_OUTPUT=/media/karaoke
+      # Genius API key for lyrics
+      - GENIUS_API=${GENIUS_API}
+    restart: unless-stopped
+    networks:
+      - karaoke-network
+    # Note: This service requires ~13-20GB of RAM
+    deploy:
+      resources:
+        limits:
+          memory: 20G
+        reservations:
+          memory: 13G
+
+networks:
+  karaoke-network:
+    driver: bridge
+
+volumes:
+  media:
+  data:

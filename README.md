@@ -1,11 +1,12 @@
 # ABOUT THIS FORK
 
-You're looking at gazugafan's fork of Karaoke Forever, which includes the following new features...
+This is based on gazugafan's fork of Karaoke Forever, which includes the following new features...
 
 * YouTube search with automatic vocal removal and accurate word-level lyrics alignment
 * Options to NOT require username and/or password when creating new accounts
 * Case INsensitive usernames
 
+All I added was a setup to make it super simple to spin up on Docker.
 [Check out this demo to see it in action](https://www.youtube.com/watch?v=zWa8k6degVs)
 
 ## Getting started with the fork
