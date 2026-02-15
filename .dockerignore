@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build outputs
+build
+dist
+tmp
+
+# Development
+.git
+.gitignore
+.gitmodules
+*.log
+
+# Documentation
+docs/content
+docs/layouts
+docs/archetypes
+docs/config.yaml
+README.md
+
+# Editor directories and files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Media and data (will be mounted as volumes)
+media
+data

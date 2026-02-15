@@ -101,11 +101,6 @@ Edit `docker-compose.yml` to:
 
 ## System Requirements
 
-### Minimum (Karaoke Forever only):
-- Docker and Docker Compose
-- 4GB RAM
-- 2GB disk space
-
 ### Full Setup (with AutoLyrixAlignService):
 - **RAM**: 16-20GB (13GB minimum)
 - **Disk Space**: 16GB initially (13GB after setup)
@@ -199,18 +194,6 @@ docker build -t autolyrix-align .
 docker run -p 3000:3000 -v /path/to/media:/media/karaoke autolyrix-align
 ```
 
-### Backup and Restore
-
-**Backup database:**
-```bash
-cp -r data ./data-backup-$(date +%Y%m%d)
-```
-
-**Backup generated karaoke:**
-```bash
-cp -r media/karaoke ./karaoke-backup-$(date +%Y%m%d)
-```
-
 ## More Information
 
 - [Karaoke Forever Documentation](https://www.karaoke-forever.com/docs/)
@@ -218,36 +201,6 @@ cp -r media/karaoke ./karaoke-backup-$(date +%Y%m%d)
 - [Main README](README.md)
 - [NUS AutoLyrixAlign](https://github.com/chitralekha18/AutoLyrixAlign)
 
-## Technical Details: Why This Architecture?
-
-### Docker Base Images (Not Nested Containers)
-
-**Q: Are we running Kaldi (a container) inside Docker (a container)?**  
-**A: No!** When we use `FROM helvio/kaldi:latest`, we're using an image as a base layer, not running a container. Docker image inheritance works like this:
-
-```
-helvio/kaldi base image
-  └─ Contains: Kaldi + AutoLyrixAlign tools pre-installed
-     └─ We add: Node.js layer
-        └─ We add: AutoLyrixAlignService code
-           └─ Final image is built (single container)
-```
-
-This is the Docker best practice for including pre-built tools.
-
-### Why Not Build From Scratch?
-
-**Alternative:** Manually install all 500+ dependencies instead of using `helvio/kaldi`
-- ❌ Image size: +500 MB
-- ❌ Build time: 20+ minutes
-- ❌ High failure risk
-- ❌ Hard to maintain
-
-**Current approach:** Use proven `helvio/kaldi` base
-- ✅ Efficient builds (5 minutes)
-- ✅ Reliable (proven by thousands)
-- ✅ Smaller images
-- ✅ Easy to maintain
 
 ### How Services Communicate
 
@@ -265,6 +218,3 @@ This is the Docker best practice for including pre-built tools.
 │
 └─────────────────────────────────┘
 ```
-
-Both containers are isolated processes but can communicate because they're on the same Docker network.
-
