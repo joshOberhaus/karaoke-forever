@@ -1,0 +1,3 @@
+[submodule "AutoLyrixAlignService"]
+	path = AutoLyrixAlignService
+	url = https://github.com/joshOberhaus/AutoLyrixAlignService
